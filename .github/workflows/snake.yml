@@ -9,7 +9,9 @@ jobs:
   generate-snake-game:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2 # Check out your repository
+    - name: Check out repository
+      uses: actions/checkout@v2
+      
     - name: Generate Snake Game from GitHub Contribution Grid
       uses: Platane/snk@v3.2.0
       with:
@@ -18,11 +20,13 @@ jobs:
           dist/github-snake.svg
           dist/github-snake-dark.svg?palette=github-dark
           dist/ocean.gif?color_snake=orange&color_dots=#bfd6f6,#8dbdff,#64a1f4,#4b91f1,#3c7dd9
+
     - name: Commit and Push Generated Game
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         git config --global user.email "action@github.com"
         git config --global user.name "GitHub Action"
         git add .
         git commit -m "Update Snake Game" -a || echo "No changes to commit"
-        # Use the PAT stored in your repository secrets for authentication
-        git push --set-upstream https://${{ secrets.GH_PAT }}@github.com/username/username.git main
+        git push https://${GITHUB_TOKEN}@github.com/${{ github.repository }}.git
