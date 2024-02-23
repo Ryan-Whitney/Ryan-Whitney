@@ -32,8 +32,11 @@ jobs:
         git fetch origin main
         git rebase origin/main
         
-    - name: Commit and Push Generated Game
-      run: |
-        git add .
-        git commit -m "Update Snake Game" -a || echo "No changes to commit"
-        git push origin HEAD:main || echo "Push failed, likely due to no changes"
+- name: Commit and Push Generated Game
+  run: |
+    git config --global user.email "action@github.com"
+    git config --global user.name "GitHub Action"
+    git pull --rebase # Pull the latest changes from the remote repository and rebase
+    git add .
+    git commit -m "Update Snake Game" -a || echo "No changes to commit"
+    git push
