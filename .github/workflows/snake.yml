@@ -1,4 +1,4 @@
-name: Generate animation
+name: Update README with Snake Game
 
 on:
   # run automatically every 24 hours
