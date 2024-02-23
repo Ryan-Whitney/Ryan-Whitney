@@ -24,4 +24,5 @@ jobs:
         git config --global user.name "GitHub Action"
         git add .
         git commit -m "Update Snake Game" -a || echo "No changes to commit"
-        git push
+        # Use the PAT stored in your repository secrets for authentication
+        git push --set-upstream https://${{ secrets.GH_PAT }}@github.com/username/username.git main
