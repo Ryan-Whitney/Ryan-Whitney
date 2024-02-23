@@ -45,7 +45,12 @@ jobs:
         run: |
           git config --global user.email "action@github.com"
           git config --global user.name "GitHub Action"
-          git pull --rebase origin ${GITHUB_REF#refs/heads/} # This dynamically pulls the current branch
+          # Stash any unstaged changes
+          git stash push -u
+          git pull --rebase origin ${GITHUB_REF#refs/heads/}
+          # Pop the stashed changes back
+          git stash pop
           git add .
           git commit -m "Update Snake Game" -a || echo "No changes to commit"
           git push
+
