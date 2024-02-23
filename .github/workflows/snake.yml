@@ -9,10 +9,9 @@ jobs:
   generate-snake-game:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2 # Check out your repository
+    - uses: actions/checkout@v2
       with:
-        fetch-depth: 0 # Fetch all history for all branches and tags to enable successful rebase
-
+        fetch-depth: 0 # Fetch all history for all branches and tags
     - name: Generate Snake Game from GitHub Contribution Grid
       uses: Platane/snk@v3.2.0
       with:
@@ -21,19 +20,15 @@ jobs:
           dist/github-snake.svg
           dist/github-snake-dark.svg?palette=github-dark
           dist/ocean.gif?color_snake=orange&color_dots=#bfd6f6,#8dbdff,#64a1f4,#4b91f1,#3c7dd9
-
-    - name: Setup Git
+    - name: Setup Git Configuration
       run: |
         git config --global user.email "action@github.com"
         git config --global user.name "GitHub Action"
-
-    - name: Rebase Changes from Remote Repository
+    - name: Rebase and Push
       run: |
         git fetch origin main
         git rebase origin/main
-
-    - name: Commit and Push Generated Game
-      run: |
         git add .
         git commit -m "Update Snake Game" -a || echo "No changes to commit"
-        git push origin main
+        git push origin HEAD:main
+
