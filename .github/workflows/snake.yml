@@ -12,6 +12,7 @@ jobs:
     - uses: actions/checkout@v2
       with:
         fetch-depth: 0 # Fetch all history for all branches and tags
+        
     - name: Generate Snake Game from GitHub Contribution Grid
       uses: Platane/snk@v3.2.0
       with:
@@ -20,16 +21,19 @@ jobs:
           dist/github-snake.svg
           dist/github-snake-dark.svg?palette=github-dark
           dist/ocean.gif?color_snake=orange&color_dots=#bfd6f6,#8dbdff,#64a1f4,#4b91f1,#3c7dd9
+          
     - name: Setup Git Configuration
       run: |
         git config --global user.email "action@github.com"
         git config --global user.name "GitHub Action"
-    - name: Pull Latest Changes
+        
+    - name: Pull Latest Changes and Rebase
       run: |
         git fetch origin main
-        git pull --rebase origin main
-    - name: Rebase and Push
+        git rebase origin/main
+        
+    - name: Commit and Push Generated Game
       run: |
         git add .
         git commit -m "Update Snake Game" -a || echo "No changes to commit"
-        git push origin HEAD:main
+        git push origin HEAD:main || echo "Push failed, likely due to no changes"
